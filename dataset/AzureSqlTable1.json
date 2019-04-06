@@ -1,0 +1,48 @@
+{
+	"name": "AzureSqlTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"type": "AzureSqlTable",
+		"structure": [
+			{
+				"name": "movie",
+				"type": "String"
+			},
+			{
+				"name": "title",
+				"type": "String"
+			},
+			{
+				"name": "genres",
+				"type": "String"
+			},
+			{
+				"name": "year",
+				"type": "Int32"
+			},
+			{
+				"name": "Rating",
+				"type": "Int32"
+			},
+			{
+				"name": "RottenTomato",
+				"type": "Int32"
+			},
+			{
+				"name": "Rotton Tomato",
+				"type": "String"
+			},
+			{
+				"name": "dateOfETL",
+				"type": "Date"
+			}
+		],
+		"typeProperties": {
+			"tableName": "[dbo].[moviestage2]"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

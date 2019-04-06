@@ -1,0 +1,28 @@
+{
+	"name": "MovieDemo1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "movie_dataflow_source1",
+						"type": "DatasetReference"
+					},
+					"name": "Movies",
+					"script": "source(output(\n\t\tmovie as string,\n\t\ttitle as string,\n\t\tgenres as string,\n\t\tyear as integer,\n\t\tRating as string,\n\t\t{Rotton Tomato} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> Movies"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "movie_dataflow_sink1",
+						"type": "DatasetReference"
+					},
+					"name": "Output",
+					"script": "Movies sink(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> Output"
+				}
+			]
+		}
+	}
+}
