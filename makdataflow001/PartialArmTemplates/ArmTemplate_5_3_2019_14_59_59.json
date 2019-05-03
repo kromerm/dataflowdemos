@@ -1,0 +1,101 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory Name",
+			"defaultValue": "makdataflow001"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/MovieDemoPipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"typeProperties": {
+							"items": {
+								"value": "[concat('[', ' 0,1,2,3,4,5,6,7,8,9,\n0,1,2,3,4,5,6,7,8,9,\n0,1,2,3,4,5,6,7,8,9,\n0,1,2,3,4,5,6,7,8,9,\n0,1,2,3,4,5,6,7,8,9 ]')]",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "MovieDemo1",
+									"type": "ExecuteDataFlow",
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"typeProperties": {
+										"dataflow": {
+											"referenceName": "MovieDemo1",
+											"type": "DataFlowReference"
+										},
+										"integrationRuntime": {
+											"referenceName": "integrationRuntime1",
+											"type": "IntegrationRuntimeReference"
+										}
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/MovieDemo1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MovieDemo1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "movie_dataflow_source1",
+								"type": "DatasetReference"
+							},
+							"name": "Movies",
+							"script": "source(output(\n\t\tmovie as string,\n\t\ttitle as string,\n\t\tgenres as string,\n\t\tyear as integer,\n\t\tRating as string,\n\t\t{Rotton Tomato} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> Movies"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "movie_dataflow_sink1",
+								"type": "DatasetReference"
+							},
+							"name": "Output",
+							"script": "DerivedColumn1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tmapColumn(\n\t\tmovie,\n\t\ttitle,\n\t\tgenres,\n\t\tyear,\n\t\tRating,\n\t\tTomato,\n\t\tNewRating\n\t),\n\tpartitionBy('hash', 1),\n\tpartitionFileNames:['movies.csv']) ~> Output"
+						}
+					],
+					"transformations": [
+						{
+							"name": "DerivedColumn1",
+							"script": "Select1 derive(NewRating = toInteger(Rating) * 10) ~> DerivedColumn1"
+						},
+						{
+							"name": "Select1",
+							"script": "Movies select(mapColumn(\n\t\tmovie,\n\t\ttitle,\n\t\tgenres,\n\t\tyear,\n\t\tRating,\n\t\tTomato = {Rotton Tomato}\n\t))~> Select1"
+						}
+					]
+				}
+			}
+		}
+	]
+}
