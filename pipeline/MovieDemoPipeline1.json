@@ -16,9 +16,9 @@
 						"referenceName": "MovieDemo1",
 						"type": "DataFlowReference"
 					},
-					"compute": {
-						"computeType": "General",
-						"coreCount": 8
+					"integrationRuntime": {
+						"referenceName": "integrationRuntime1",
+						"type": "IntegrationRuntimeReference"
 					}
 				}
 			}
