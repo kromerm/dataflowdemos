@@ -33,7 +33,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "[concat('[', ' 0,1,2,3,4,5,6,7,8,9,\n0,1,2,3,4,5,6,7,8,9,\n0,1,2,3,4,5,6,7,8,9,\n0,1,2,3,4,5,6,7,8,9,\n0,1,2,3,4,5,6,7,8,9 ]')]",
+								"value": "@createArray(1,2,3,4,5,6,7,8,9,0)",
 								"type": "Expression"
 							},
 							"activities": [
@@ -853,6 +853,25 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime1')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "MemoryOptimized",
+							"coreCount": 260,
+							"timeToLiveInMinutes": 60
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/myfastcluster')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
@@ -1236,25 +1255,6 @@
 				"[concat(variables('factoryId'), '/datasets/SQLProdsWithHash')]",
 				"[concat(variables('factoryId'), '/datasets/SQLProduct')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/integrationRuntime1')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "Managed",
-				"typeProperties": {
-					"computeProperties": {
-						"location": "AutoResolve",
-						"dataFlowProperties": {
-							"computeType": "MemoryOptimized",
-							"coreCount": 260,
-							"timeToLiveInMinutes": 60
-						}
-					}
-				}
-			},
-			"dependsOn": []
 		}
 	]
 }
