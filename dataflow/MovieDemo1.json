@@ -20,7 +20,17 @@
 						"type": "DatasetReference"
 					},
 					"name": "Output",
-					"script": "Movies sink(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> Output"
+					"script": "DerivedColumn1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tmapColumn(\n\t\tmovie,\n\t\ttitle,\n\t\tgenres,\n\t\tyear,\n\t\tRating,\n\t\tTomato,\n\t\tNewRating\n\t),\n\tpartitionBy('hash', 1),\n\tpartitionFileNames:['movies.csv']) ~> Output"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DerivedColumn1",
+					"script": "Select1 derive(NewRating = toInteger(Rating) * 10) ~> DerivedColumn1"
+				},
+				{
+					"name": "Select1",
+					"script": "Movies select(mapColumn(\n\t\tmovie,\n\t\ttitle,\n\t\tgenres,\n\t\tyear,\n\t\tRating,\n\t\tTomato = {Rotton Tomato}\n\t))~> Select1"
 				}
 			]
 		}
