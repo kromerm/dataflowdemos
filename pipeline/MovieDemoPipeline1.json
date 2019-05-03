@@ -3,23 +3,36 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "ExecuteMovieDemoDataFlow",
-				"type": "ExecuteDataFlow",
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false
-				},
+				"name": "ForEach1",
+				"type": "ForEach",
 				"typeProperties": {
-					"dataflow": {
-						"referenceName": "MovieDemo1",
-						"type": "DataFlowReference"
+					"items": {
+						"value": "[ 0,1,2,3,4,5,6,7,8,9,\n0,1,2,3,4,5,6,7,8,9,\n0,1,2,3,4,5,6,7,8,9,\n0,1,2,3,4,5,6,7,8,9,\n0,1,2,3,4,5,6,7,8,9 ]",
+						"type": "Expression"
 					},
-					"integrationRuntime": {
-						"referenceName": "integrationRuntime1",
-						"type": "IntegrationRuntimeReference"
-					}
+					"activities": [
+						{
+							"name": "MovieDemo1",
+							"type": "ExecuteDataFlow",
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "MovieDemo1",
+									"type": "DataFlowReference"
+								},
+								"integrationRuntime": {
+									"referenceName": "integrationRuntime1",
+									"type": "IntegrationRuntimeReference"
+								}
+							}
+						}
+					]
 				}
 			}
 		]
